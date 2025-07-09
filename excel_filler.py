@@ -11,11 +11,14 @@ import json
 TOTAL_ROWS = 100  # Reduced for faster testing, change back to 100000 if needed
 TENANT_ID = "df234305-8a47-4b4d-8efb-716a6b695428"
 IMPORT_USER_ID = "bf255bcc-e2db-4d47-8e3e-5b8b7b4f105d"
-IMPORT_USER_NAME="Admin Tekip"
+IMPORT_USER_NAME = "Admin Tekip"
+
 # --- Output Filenames ---
 OUTPUT_EXCEL_FILENAME = "populated_patent_data_final.xlsx"
 OUTPUT_USER_MAP_JSON = "users_map.json"
 OUTPUT_CLIENT_HIERARCHY_JSON = "client_hierarchy_map.json"
+OUTPUT_ROLE_MAP_JSON = "role_based_user_map.json"
+OUTPUT_USER_CLIENT_MAP_JSON = "user_client_associations.json"
 
 # --- Data Generation (same as before) ---
 fake = Faker()
@@ -173,7 +176,6 @@ def generate_date(start_date):
 
 
 print("Starting data generation...")
-# (The entire data generation loop remains the same as your original script)
 all_rows, row_count, docket_id = [], 0, 1
 while row_count < TOTAL_ROWS:
     docket_number = f"DOCKET-{docket_id:05d}"
@@ -321,62 +323,130 @@ print("Excel file saved.")
 # --- JSON MAPPING GENERATION ---
 print("\n--- Starting JSON Mapping Generation ---")
 
-# Initialize the user map with the special import user and their predefined ID.
-user_uuid_map = {
-    IMPORT_USER_NAME: IMPORT_USER_ID
-}
+# Initialize all maps
+user_uuid_map = {IMPORT_USER_NAME: IMPORT_USER_ID}
 client_hierarchy_map = {}
+role_based_user_map = {
+    "inventors": {},
+    "patent_agents": {},
+    "reviewers": {},
+    "analysts": {},
+}
+user_client_map = {}
 
-# 1. Generate User Map
-print("Processing `user` data for mapping...")
+# 1. Generate Comprehensive User Map
+print("1. Processing all `user` data for the main user map...")
 user_columns = ["Manager (Internal)", "Reviewer", "Drafter", "Analyst", "Patent Agent"]
 all_users = set()
-
-# Gather all unique user names from the DataFrame
 for col in user_columns:
     all_users.update(df[col].dropna().unique())
 for inventor_list in df["Inventors"].dropna().unique():
-    # Split inventor strings and strip whitespace
     all_users.update([name.strip() for name in inventor_list.split(",")])
-all_users.discard("")  # Remove any empty strings that might have crept in
-
-# Populate the user map, adding new UUIDs for users not already present
+all_users.discard("")
 for full_name in all_users:
     if full_name not in user_uuid_map:
         user_uuid_map[full_name] = str(uuid.uuid4())
 
-# 2. Generate Client Hierarchy Map (Clients, Departments, Divisions)
-print("Processing client hierarchy for mapping...")
+# 2. Generate Client Hierarchy Map
+print("2. Processing client hierarchy for mapping...")
 unique_clients = df["Client"].dropna().unique()
 for client_name in unique_clients:
     if not client_name:
         continue
-
-    client_uuid = str(uuid.uuid4())
     client_hierarchy_map[client_name] = {
-        "uuid": client_uuid,
+        "uuid": str(uuid.uuid4()),
         "departments": {},
         "divisions": {},
     }
-
-    # Find unique departments for this client
     client_depts = df[df["Client"] == client_name]["Department"].dropna().unique()
     for dept_name in client_depts:
         client_hierarchy_map[client_name]["departments"][dept_name] = str(uuid.uuid4())
-
-    # Find unique divisions for this client
     client_divs = df[df["Client"] == client_name]["Client Division"].dropna().unique()
     for div_name in client_divs:
         client_hierarchy_map[client_name]["divisions"][div_name] = str(uuid.uuid4())
 
-# 3. Save mapping dictionaries to JSON files
-print("Saving mapping data to JSON files...")
+# 3. Generate Role-Based User Map
+print("3. Populating role-specific user maps...")
+role_column_map = {
+    "inventors": "Inventors",
+    "patent_agents": "Patent Agent",
+    "reviewers": "Reviewer",
+    "analysts": "Analyst",
+}
+for role, column in role_column_map.items():
+    unique_names = set()
+    if column == "Inventors":
+        for name_list in df[column].dropna().unique():
+            unique_names.update([name.strip() for name in name_list.split(",")])
+    else:
+        unique_names.update(df[column].dropna().unique())
+    unique_names.discard("")
+    for name in unique_names:
+        if name in user_uuid_map:
+            role_based_user_map[role][name] = user_uuid_map[name]
+
+# 4. Generate User-to-Client Association Map
+print("4. Building user-to-client association map...")
+user_association_cols = [
+    "Manager (Internal)",
+    "Reviewer",
+    "Drafter",
+    "Analyst",
+    "Patent Agent",
+    "Inventors",
+]
+for index, row in df.iterrows():
+    client_name = row["Client"]
+    if pd.isna(client_name) or client_name not in client_hierarchy_map:
+        continue
+
+    users_in_row = []
+    for col in user_association_cols:
+        if pd.notna(row[col]):
+            if col == "Inventors":
+                users_in_row.extend([name.strip() for name in row[col].split(",")])
+            else:
+                users_in_row.append(row[col])
+
+    for user_name in set(users_in_row):
+        if not user_name or user_name not in user_uuid_map:
+            continue
+        if user_name not in user_client_map:
+            user_client_map[user_name] = {
+                "user_id": user_uuid_map[user_name],
+                "clients": set(),
+            }
+
+        # Add a tuple of (client_name, client_id) to the set to ensure uniqueness
+        client_id = client_hierarchy_map[client_name]["uuid"]
+        user_client_map[user_name]["clients"].add((client_name, client_id))
+
+# Convert sets of tuples to a sorted list of dictionaries for clean JSON output
+for user_name in user_client_map:
+    client_tuples = user_client_map[user_name]["clients"]
+    # Sort by client name (the first element of the tuple)
+    sorted_clients = sorted(list(client_tuples), key=lambda x: x[0])
+    # Convert the sorted list of tuples to the desired list of dictionaries
+    user_client_map[user_name]["clients"] = [
+        {"name": name, "id": uid} for name, uid in sorted_clients
+    ]
+
+# 5. Save all mapping dictionaries to JSON files
+print("5. Saving all mapping data to JSON files...")
 with open(OUTPUT_USER_MAP_JSON, "w", encoding="utf-8") as f:
     json.dump(user_uuid_map, f, indent=4)
-print(f"Saved user map to {OUTPUT_USER_MAP_JSON}")
+print(f"-> Saved main user map to {OUTPUT_USER_MAP_JSON}")
 
 with open(OUTPUT_CLIENT_HIERARCHY_JSON, "w", encoding="utf-8") as f:
     json.dump(client_hierarchy_map, f, indent=4)
-print(f"Saved client hierarchy map to {OUTPUT_CLIENT_HIERARCHY_JSON}")
+print(f"-> Saved client hierarchy map to {OUTPUT_CLIENT_HIERARCHY_JSON}")
+
+with open(OUTPUT_ROLE_MAP_JSON, "w", encoding="utf-8") as f:
+    json.dump(role_based_user_map, f, indent=4)
+print(f"-> Saved role-based user map to {OUTPUT_ROLE_MAP_JSON}")
+
+with open(OUTPUT_USER_CLIENT_MAP_JSON, "w", encoding="utf-8") as f:
+    json.dump(user_client_map, f, indent=4)
+print(f"-> Saved user-client association map to {OUTPUT_USER_CLIENT_MAP_JSON}")
 
 print("\nData and mapping generation complete!")
