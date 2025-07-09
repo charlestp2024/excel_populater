@@ -1,0 +1,243 @@
+{
+    "Gamble-Singleton": {
+        "uuid": "3cac90cc-cdd4-462b-966e-404eb56a92f4",
+        "departments": {
+            "Drug Discovery": "caca5ab3-a402-4c89-a8bd-3b29352db1c7"
+        },
+        "divisions": {
+            "Customer Experience": "3769cda5-dd92-481e-8cb1-5bdb46521987",
+            "Renewable Energy": "ec9d1b07-8ab4-41e0-ae93-37b2db595c82"
+        }
+    },
+    "Singh, Stokes and Jones": {
+        "uuid": "8f734221-9ba0-4d05-9f1c-69c6f9f25d6e",
+        "departments": {
+            "Cybersecurity": "4730167d-7915-4e2f-9bea-18dda9142923"
+        },
+        "divisions": {
+            "Sustainability": "b45e7a6b-6d21-43e9-b3e8-9c1058c017fc"
+        }
+    },
+    "Rosario, Clark and Patterson": {
+        "uuid": "0a6e6826-a469-4072-9997-76c04867c178",
+        "departments": {
+            "Carbon Management": "be7c4088-f405-491d-ae5f-cb38a04fd992",
+            "Bioinformatics": "71b4713b-8d20-4c89-ab92-231b789deda6"
+        },
+        "divisions": {
+            "Electric Vehicle Tech": "3b10d817-fccb-48ea-bed2-aa8c2506fc0f",
+            "Core Tech": "f8795785-4355-40bb-aff7-445cefb286d5",
+            "Tech Enablement": "df60c6eb-76d1-44f5-81b2-90ae80f2fa48",
+            "Customer Experience": "6bd274fb-6d15-42ef-b4e5-d5eef525fe18"
+        }
+    },
+    "Moore-Nichols": {
+        "uuid": "6e83322e-68d4-4e71-ba4e-98da91b969f9",
+        "departments": {
+            "Fintech Innovation": "130ae53f-fff3-44e7-8e21-e8002040e495"
+        },
+        "divisions": {
+            "Core Tech": "be0a6b6a-158a-4737-9543-96c3c6f1e704"
+        }
+    },
+    "Sexton Inc": {
+        "uuid": "3fd16fd9-ffda-40eb-95d9-5b2302b3577f",
+        "departments": {
+            "Civil Systems": "85ef8533-7dde-4e0d-8459-9125e28bd927"
+        },
+        "divisions": {
+            "Cloud Infrastructure": "8e50d7aa-799a-4de0-baf8-1b09bc41ac21"
+        }
+    },
+    "Bell-Bell": {
+        "uuid": "e7c854c4-a6fd-4115-9c23-9e3926c885d3",
+        "departments": {
+            "AI Solutions": "7c5df926-891e-441c-82a9-a5f7d18dde8d"
+        },
+        "divisions": {
+            "Customer Experience": "67bf785c-1880-462b-858b-9632bd4d216d"
+        }
+    },
+    "Martin-Malone": {
+        "uuid": "7b18a858-a6e2-4943-b8b4-4d679a774763",
+        "departments": {
+            "Telecommunications": "1f1aee6e-498e-4cd4-9772-881db2642ae0"
+        },
+        "divisions": {
+            "Renewable Energy": "d7899203-ae2d-42d1-9904-d023626be3bd"
+        }
+    },
+    "Nichols-Mueller": {
+        "uuid": "32ae4d6d-16f4-4bf0-87d0-656abca41b75",
+        "departments": {
+            "Cybersecurity": "554aa61a-8ade-4966-a526-ebe332d2d9f7"
+        },
+        "divisions": {
+            "IP Strategy": "ec342d7c-53a2-404b-85e8-63cf57b6d566"
+        }
+    },
+    "Peterson, Heath and Arnold": {
+        "uuid": "4b4f7a2c-b4c8-4249-bec9-9bfbfae3263c",
+        "departments": {
+            "Carbon Management": "827395ee-94cc-4e9e-88ce-89f4ffff10e2",
+            "Fintech Innovation": "2ff9dcf0-97de-49cd-82ab-4aa13c5bcfd1"
+        },
+        "divisions": {
+            "Global Solutions": "d2736499-0ea8-41d6-a962-b3b4b7fac5ee",
+            "Core Tech": "510af229-10a3-4f0d-92fc-a5c8ae1b22b1"
+        }
+    },
+    "Ramos Ltd": {
+        "uuid": "d75c16eb-2470-48ee-a256-998f3473239f",
+        "departments": {
+            "Bioinformatics": "699b353b-8b5b-4c8d-aaa2-01061f9748ed"
+        },
+        "divisions": {
+            "EU Compliance": "429c02bd-e6e0-4a1a-ba79-b9678bdb0e98"
+        }
+    },
+    "King-Adams": {
+        "uuid": "8d889393-c45d-4d7b-8d15-63806146dab8",
+        "departments": {
+            "Aerospace": "6b9fd47a-adb5-4dc7-b280-169dc634a852"
+        },
+        "divisions": {
+            "IP Strategy": "62f1f279-1942-4064-9045-b43637ab10eb",
+            "ASEAN R&D": "2fc6b1ab-336f-4055-ab20-597f96c7f316"
+        }
+    },
+    "Smith Inc": {
+        "uuid": "c5f0b367-a66e-4f56-afa8-f7cc7afbef1a",
+        "departments": {
+            "Robotics": "62c0ff18-3574-4afe-8e61-435944016965"
+        },
+        "divisions": {
+            "Customer Experience": "1e072ec5-ef48-42e8-9819-3846e8bf5a1d"
+        }
+    },
+    "Anderson-Garcia": {
+        "uuid": "23d8cb09-ac45-4216-88d9-f35ccb730d89",
+        "departments": {
+            "Bioinformatics": "8fd92520-ffee-416f-8d9e-fa73744965f8"
+        },
+        "divisions": {
+            "US Patent Unit": "2189553f-f641-4b2e-9e74-cf6c50b34935"
+        }
+    },
+    "Benton PLC": {
+        "uuid": "f5f156aa-b5fe-40cd-8516-8de8fc256a05",
+        "departments": {
+            "Cybersecurity": "0bc74ddc-c802-4ed6-8867-5d2a6d69b7c0",
+            "Canada AI Research": "063134ed-da3d-4444-aa7c-f69e08a7a883"
+        },
+        "divisions": {
+            "Blockchain Integration": "2230e8e5-594d-4452-b0a3-368d03b97c10",
+            "Advanced Materials": "d3816e20-161d-4e24-91e4-36b2a7aaf381",
+            "ASEAN R&D": "91210505-4cda-438a-8ca2-95f3d7e27af4"
+        }
+    },
+    "Harper, Young and Jones": {
+        "uuid": "a863f4f3-aa4f-44a7-b558-c3b8e6208cbf",
+        "departments": {
+            "Telecommunications": "156b552c-5a20-4f52-8c40-5051e2432932"
+        },
+        "divisions": {
+            "AI Research": "97ae71b0-3d9b-4bac-a52a-8c2a588f84e8",
+            "IP Strategy": "2b5bce66-211b-4a2f-a2b2-8e10b366ff4b",
+            "Core Tech": "5f4ff3a0-7710-4965-9d0d-ca2b64d9c1e7"
+        }
+    },
+    "Brown-Carlson": {
+        "uuid": "a224f780-7b56-45db-921a-73f09c93d6a7",
+        "departments": {
+            "Robotics": "1bacca06-1cdf-4660-a1da-0d312eeffd0b"
+        },
+        "divisions": {
+            "Blockchain Integration": "62557fab-5898-485b-9ddd-86cd46517e9a"
+        }
+    },
+    "Williams LLC": {
+        "uuid": "52c865ec-404d-4a84-bf67-619aca037bc2",
+        "departments": {
+            "Data Science": "4ab439c5-64da-44db-801c-bfe9f9b712f1"
+        },
+        "divisions": {
+            "US Patent Unit": "dd4c9d2b-f552-447e-b9a8-4c2f456d13e2"
+        }
+    },
+    "Cooper, Hodges and Boyd": {
+        "uuid": "63924bb5-caa1-44ec-93e5-4ee245836b78",
+        "departments": {
+            "Desert Tech Research": "7ecf687a-cc1c-46db-8a00-0bf7269f015f"
+        },
+        "divisions": {
+            "R&D": "5b43021d-90f1-4fcd-aef5-9d388b1e5a9c"
+        }
+    },
+    "Jones-Galloway": {
+        "uuid": "0f45f3ea-51b3-48bd-b82b-c6cab74d0c77",
+        "departments": {
+            "Autonomous Vehicles": "8efe6ffc-c0d0-4b5d-b3fa-684fb361650d"
+        },
+        "divisions": {
+            "AI Research": "069b89f0-7a9f-454c-8162-111fecdbd051",
+            "Global Solutions": "6b6721b1-c9e8-4350-9b02-9d2ff076dde7"
+        }
+    },
+    "Hale and Sons": {
+        "uuid": "f014ec99-bde5-4be8-9620-89be1b114e0d",
+        "departments": {
+            "AI Solutions": "01031acf-6448-4878-8b8c-c1dabe939578"
+        },
+        "divisions": {
+            "IP Strategy": "3a0ada7d-9c55-499b-a2a7-8cce167d4d3f"
+        }
+    },
+    "Duncan-Lucas": {
+        "uuid": "162301aa-6484-40de-8f0b-519aa1f2274b",
+        "departments": {
+            "Desert Tech Research": "9f2a507a-2a94-4cc0-828e-5dc53ddb9e73"
+        },
+        "divisions": {
+            "EU Compliance": "66a25a83-dadb-4564-b0c4-7858d9f486ff"
+        }
+    },
+    "Carter, Miller and Torres": {
+        "uuid": "34627c63-c665-4041-9893-2c215a5c0163",
+        "departments": {
+            "Bioinformatics": "cfc58b3c-1223-4523-bf9c-71ad591d738a"
+        },
+        "divisions": {
+            "AI Research": "ae80f620-8c20-43d6-880a-68a921c64ebc"
+        }
+    },
+    "Thomas, Smith and Williams": {
+        "uuid": "2968ca8a-b5cf-42f1-8453-f569c6c15f5a",
+        "departments": {
+            "Data Science": "3a20ff79-c600-44b2-b7c2-440ead8b05cf"
+        },
+        "divisions": {
+            "Smart Devices": "7a537a99-f614-4de6-8baf-33c30288b795"
+        }
+    },
+    "Macias and Sons": {
+        "uuid": "b387b611-91c1-4bdf-8304-26706a9c1ffa",
+        "departments": {
+            "APAC Regulatory": "a8eaba10-4947-4d8e-88a8-5f8e964e4e62",
+            "Data Science": "5b815333-f63c-4256-826c-7f3f339ae57c"
+        },
+        "divisions": {
+            "Blockchain Integration": "2c4ba4e7-40ba-4f0b-93c7-b227c6217ebf",
+            "EU Compliance": "9d218d6a-c232-427c-823c-3ef78ce24008"
+        }
+    },
+    "Rodriguez and Sons": {
+        "uuid": "15edfa2c-d67b-478b-9195-a6cf6badf7f0",
+        "departments": {
+            "Fintech Innovation": "6c07c337-7d45-4626-89f2-3d6b3571d8b1"
+        },
+        "divisions": {
+            "Platform Engineering": "432ae27a-9dcf-4ec8-8c59-c3bb16d0f68c"
+        }
+    }
+}
