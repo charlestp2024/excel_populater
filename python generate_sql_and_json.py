@@ -17,6 +17,7 @@ OUTPUT_DRAFTING_SQL_FILENAME = "generated_pmv_drafting_inserts.sql"
 OUTPUT_DOCKET_REVIEW_SQL_FILENAME = "generated_pmv_dr_inserts.sql"
 OUTPUT_PMV_CSD_SQL_FILENAME = "generated_pmv_csd_inserts.sql"
 OUTPUT_PROSECUTION_SQL_FILENAME = "generated_pmv_prosecution_inserts.sql"
+OUTPUT_PMV_DCA_SQL_FILENAME = "generated_pmv_dca_inserts.sql"
 
 
 def escape_sql(value):
@@ -44,13 +45,15 @@ def main():
     print("Mapping files loaded.")
 
     # Lists to hold SQL statements for each database
-    invd_sql, drafting_sql, docket_review_sql, csd_sql, prosecution_sql = (
+    invd_sql, drafting_sql, docket_review_sql, csd_sql, prosecution_sql, dca_sql = (
+        [],
         [],
         [],
         [],
         [],
         [],
     )
+
     NOW_TIMESTAMP = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     # 1. Generate User INSERTs for all databases
@@ -76,6 +79,10 @@ def main():
         # <-- NEW: Insert for the new CSD database 'user' table
         csd_sql.append(
             f"INSERT INTO `user` (`uuid`, `first_name`, `last_name`, `full_name`, `tenant_id`, `deleted`, `inactive`, `address`, `contact`, `email`, `created_on`, `modified_on`) VALUES ('{user_uuid}', '{escape_sql(first_name)}', '{escape_sql(last_name)}', '{escape_sql(full_name)}', '{TENANT_ID}', 0, 0, NULL, NULL, '{escape_sql(email)}', '{NOW_TIMESTAMP}', '{NOW_TIMESTAMP}');"
+        )
+        dca_sql.append(
+            f"INSERT INTO `user` (`id`, `firstname`, `lastname`, `fullname`, `email`, `uuid`, `active`, `created_on`, `modified_on`, `tenant_id`) "
+            f"VALUES (0, '{escape_sql(first_name)}', '{escape_sql(last_name)}', '{escape_sql(full_name)}', '{email}', '{user_uuid}', 1, '{NOW_TIMESTAMP}', '{NOW_TIMESTAMP}', '{TENANT_ID}');"
         )
 
     # 2. Generate Client, Department, and Division INSERTs
@@ -107,6 +114,10 @@ def main():
         csd_sql.append(
             f"INSERT INTO `client` (`uuid`, `client_name`, `client_code`, `tenant_id`, `is_active`, `created_on`, `modified_on`) VALUES ('{client_uuid}', '{escape_sql(client_name)}', {client_code_counter}, '{TENANT_ID}', 1, '{NOW_TIMESTAMP}', '{NOW_TIMESTAMP}');"
         )
+        dca_sql.append(
+            f"INSERT INTO `client` (`uuid`, `client_name`, `client_code`, `tenant_id`, `is_active`, `created_on`, `modified_on`) "
+            f"VALUES ('{client_uuid}', '{escape_sql(client_name)}', {client_code_counter}, '{TENANT_ID}', 1, '{NOW_TIMESTAMP}', '{NOW_TIMESTAMP}');"
+        )
 
         client_code_counter += 1
 
@@ -130,6 +141,10 @@ def main():
             )
             prosecution_sql.append(
                 f"INSERT INTO `department` (`uuid`, `department`, `tenant_id`, `client_id`, `created_on`, `modified_on`) VALUES ('{dept_uuid}', '{escape_sql(dept_name)}', '{TENANT_ID}', '{client_uuid}', '{NOW_TIMESTAMP}', '{NOW_TIMESTAMP}');"
+            )
+            dca_sql.append(
+                f"INSERT INTO `department` (`uuid`, `department`, `tenant_id`, `client_id`, `created_on`, `modified_on`) "
+                f"VALUES ('{dept_uuid}', '{escape_sql(dept_name)}', '{TENANT_ID}', '{client_uuid}', '{NOW_TIMESTAMP}', '{NOW_TIMESTAMP}');"
             )
 
         # --- Division INSERTs ---
@@ -171,6 +186,12 @@ def main():
         f.write("-- Populates tables `client`, `department`, and `user`\n\n")
         f.write("\n".join(prosecution_sql))
     print(f"Saved PROSECUTION SQL to {OUTPUT_PROSECUTION_SQL_FILENAME}")
+
+    with open(OUTPUT_PMV_DCA_SQL_FILENAME, "w", encoding="utf-8") as f:
+        f.write("-- Generated SQL inserts for DCA database\n")
+        f.write("-- Populates tables `client`, `department`, and `user`\n\n")
+        f.write("\n".join(dca_sql))
+    print(f"Saved DCA SQL to {OUTPUT_PMV_DCA_SQL_FILENAME}")
 
     print("\nAll SQL files generated successfully!")
 
