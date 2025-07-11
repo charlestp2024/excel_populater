@@ -81,9 +81,9 @@ def main():
             f"INSERT INTO `user` (`uuid`, `first_name`, `last_name`, `full_name`, `tenant_id`, `deleted`, `inactive`, `address`, `contact`, `email`, `created_on`, `modified_on`) VALUES ('{user_uuid}', '{escape_sql(first_name)}', '{escape_sql(last_name)}', '{escape_sql(full_name)}', '{TENANT_ID}', 0, 0, NULL, NULL, '{escape_sql(email)}', '{NOW_TIMESTAMP}', '{NOW_TIMESTAMP}');"
         )
         dca_sql.append(
-            f"INSERT INTO `user` (`id`, `firstname`, `lastname`, `fullname`, `email`, `uuid`, `active`, `created_on`, `modified_on`, `tenant_id`) "
-            f"VALUES (0, '{escape_sql(first_name)}', '{escape_sql(last_name)}', '{escape_sql(full_name)}', '{email}', '{user_uuid}', 1, '{NOW_TIMESTAMP}', '{NOW_TIMESTAMP}', '{TENANT_ID}');"
-        )
+         f"INSERT INTO `user` (`firstname`, `lastname`, `fullname`, `email`, `uuid`, `active`, `created_on`, `modified_on`, `tenant_id`) "
+        f"VALUES ('{escape_sql(first_name)}', '{escape_sql(last_name)}', '{escape_sql(full_name)}', '{email}', '{user_uuid}', 1, '{NOW_TIMESTAMP}', '{NOW_TIMESTAMP}', '{TENANT_ID}');"
+       )
 
     # 2. Generate Client, Department, and Division INSERTs
     print("Generating SQL for Clients, Departments, and Divisions...")

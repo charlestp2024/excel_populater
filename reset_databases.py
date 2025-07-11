@@ -6,32 +6,44 @@ from mysql.connector import Error
 HOST = 'localhost'
 PORT = 3306
 USER = 'root'
-PASSWORD = 'root'  # 🔒 replace this
+PASSWORD = 'root'
 DATABASES = [
     'pmv_csd',
     'pmv_dr',
     'pmv_drafting',
     'pmv_invention_disclosure',
-    'pmv_prosecution'
+    'pmv_prosecution',
+    'pmv_dca'
 ]
 SQL_FOLDER = 'empty_database'
 
-# Additional generated SQL filenames
 OUTPUT_INVD_SQL_FILENAME = "generated_pmv_invention_disclosure_inserts.sql"
 OUTPUT_DRAFTING_SQL_FILENAME = "generated_pmv_drafting_inserts.sql"
 OUTPUT_DOCKET_REVIEW_SQL_FILENAME = "generated_pmv_dr_inserts.sql"
 OUTPUT_PMV_CSD_SQL_FILENAME = "generated_pmv_csd_inserts.sql"
 OUTPUT_PROSECUTION_SQL_FILENAME = "generated_pmv_prosecution_inserts.sql"
+OUTPUT_DCA_SQL_FILENAME = "generated_pmv_dca_inserts.sql"
 
 def execute_sql_file(cursor, file_path):
-    """Read and execute SQL commands from a file."""
+    """Execute SQL file manually splitting by semicolon."""
     with open(file_path, 'r', encoding='utf-8') as file:
         sql_commands = file.read()
-        for command in sql_commands.split(';'):
-            if command.strip():
-                cursor.execute(command)
+
+        # Split only at semicolon followed by newline to avoid cutting inside statements
+        commands = sql_commands.split(';\n')
+
+        for command in commands:
+            command = command.strip()
+            if command:
+                try:
+                    cursor.execute(command)
+                except Error as e:
+                    print(f"❌ Error executing SQL: {e}\n--> Offending command: {command[:150]}...")
+                    raise
 
 def main():
+    connection = None
+    cursor = None
     try:
         connection = mysql.connector.connect(
             host=HOST,
@@ -44,7 +56,6 @@ def main():
             print("✅ Connected to MySQL Server")
             cursor = connection.cursor()
 
-            # Drop and create databases, then import schema SQL files
             for db_name in DATABASES:
                 print(f"\n⚙️  Dropping database `{db_name}` if exists...")
                 cursor.execute(f"DROP DATABASE IF EXISTS `{db_name}`")
@@ -64,13 +75,13 @@ def main():
             connection.commit()
             print("\n🎉 All databases recreated and schema imported successfully.")
 
-            # Now run the generated data insert files into respective DBs
             generated_files = [
                 (OUTPUT_INVD_SQL_FILENAME, 'pmv_invention_disclosure'),
                 (OUTPUT_DRAFTING_SQL_FILENAME, 'pmv_drafting'),
                 (OUTPUT_DOCKET_REVIEW_SQL_FILENAME, 'pmv_dr'),
                 (OUTPUT_PMV_CSD_SQL_FILENAME, 'pmv_csd'),
-                (OUTPUT_PROSECUTION_SQL_FILENAME, 'pmv_prosecution')
+                (OUTPUT_PROSECUTION_SQL_FILENAME, 'pmv_prosecution'),
+                (OUTPUT_DCA_SQL_FILENAME, 'pmv_dca')
             ]
 
             for file_name, db_name in generated_files:
@@ -90,8 +101,9 @@ def main():
         print(f"❌ Error: {e}")
 
     finally:
-        if connection.is_connected():
+        if cursor:
             cursor.close()
+        if connection and connection.is_connected():
             connection.close()
             print("🔌 MySQL connection closed.")
 
